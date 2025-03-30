@@ -126,7 +126,7 @@ setTimeout(() => {
     const demoMessage = document.createElement('div');
     demoMessage.className = 'message received';
     demoMessage.innerHTML = `
-        Welcome to the iframe chat! Try sending a message to communicate with the parent window.
+        Welcome to the chat! This page will communicate with its parent window when placed in an iframe.
         <span class="message-info">System at ${new Date().toLocaleTimeString()}</span>
     `;
     chatMessages.appendChild(demoMessage);
@@ -138,7 +138,7 @@ setTimeout(() => {
     statusMessage.className = 'message system';
     statusMessage.innerHTML = `
         <span style="color: ${isInIframe ? 'green' : 'orange'}">
-            ${isInIframe ? 'Running in iframe - communications enabled!' : 'Not running in an iframe - parent window messaging may not work.'}
+            ${isInIframe ? 'Running in iframe - communications enabled!' : 'Not yet embedded in an iframe - parent window messaging will work when embedded.'}
         </span>
         <span class="message-info">System at ${new Date().toLocaleTimeString()}</span>
     `;
