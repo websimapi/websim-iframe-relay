@@ -11,6 +11,8 @@ export const config = {
         message: '', // The actual message text
         sender: '',  // Who sent the message
         timestamp: '' // When the message was sent
-    }
+    },
+    
+    // Debug mode to help troubleshoot postMessage communication
+    debugMode: true
 };
-

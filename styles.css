@@ -126,3 +126,11 @@ pre {
     background-color: #3a539b;
 }
 
+.system {
+    background-color: #f0f0f0;
+    margin: 10px auto;
+    border-radius: 5px;
+    font-style: italic;
+    border-left: 3px solid #4a69bd;
+    padding-left: 12px;
+}

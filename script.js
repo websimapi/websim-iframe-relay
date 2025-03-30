@@ -34,8 +34,25 @@ function sendMessage() {
         `;
         chatMessages.appendChild(messageEl);
         
-        // Send the message to the parent window
-        window.parent.postMessage(messageData, '*');
+        // Send the message to the parent window with proper targeting
+        try {
+            // Send to parent with proper origin targeting
+            window.parent.postMessage(messageData, '*');
+            
+            if (config.debugMode) {
+                console.log('Message sent to parent:', messageData);
+            }
+        } catch (err) {
+            console.error('Failed to send message:', err);
+            // Add fallback notification in the chat
+            const errorMsg = document.createElement('div');
+            errorMsg.className = 'message system';
+            errorMsg.innerHTML = `
+                <span style="color:red">Failed to send message: ${err.message}</span>
+                <span class="message-info">System at ${timeString}</span>
+            `;
+            chatMessages.appendChild(errorMsg);
+        }
         
         // Clear the input field
         messageInput.value = '';
@@ -70,8 +87,20 @@ copyCodeButton.addEventListener('click', () => {
 
 // Listen for messages from parent window
 window.addEventListener('message', (event) => {
-    // You might want to add origin checking in production
+    // Proper origin validation
+    if (config.allowedOrigins[0] !== '*' && 
+        !config.allowedOrigins.includes(event.origin)) {
+        if (config.debugMode) {
+            console.warn(`Rejected message from unauthorized origin: ${event.origin}`);
+        }
+        return;
+    }
+    
     const data = event.data;
+    
+    if (config.debugMode) {
+        console.log('Received message:', data);
+    }
     
     if (data.type === 'CHAT_MESSAGE' && data.sender !== config.userName) {
         // Create a message element for received messages
@@ -92,7 +121,7 @@ window.addEventListener('message', (event) => {
     }
 });
 
-// Add a demo message
+// Add a demo message and communication status check
 setTimeout(() => {
     const demoMessage = document.createElement('div');
     demoMessage.className = 'message received';
@@ -101,5 +130,17 @@ setTimeout(() => {
         <span class="message-info">System at ${new Date().toLocaleTimeString()}</span>
     `;
     chatMessages.appendChild(demoMessage);
+    
+    // Check if we're in an iframe
+    const isInIframe = window !== window.parent;
+    
+    const statusMessage = document.createElement('div');
+    statusMessage.className = 'message system';
+    statusMessage.innerHTML = `
+        <span style="color: ${isInIframe ? 'green' : 'orange'}">
+            ${isInIframe ? 'Running in iframe - communications enabled!' : 'Not running in an iframe - parent window messaging may not work.'}
+        </span>
+        <span class="message-info">System at ${new Date().toLocaleTimeString()}</span>
+    `;
+    chatMessages.appendChild(statusMessage);
 }, 1000);
-

@@ -27,8 +27,9 @@
             <h4>How to listen for messages in the parent window:</h4>
             <pre id="codeSnippet">
 window.addEventListener('message', function(event) {
-    // Security check
-    if (event.origin !== window.location.origin) return;
+    // Security check - adjust the origin to match your iframe's origin
+    // Uncomment and modify the next line for production use:
+    // if (event.origin !== "https://your-iframe-domain.com") return;
     
     // Process the message
     const data = event.data;
@@ -36,7 +37,17 @@ window.addEventListener('message', function(event) {
         console.log('Received message:', data.message);
         console.log('Sender:', data.sender);
         console.log('Timestamp:', data.timestamp);
+        
         // Handle the message in your application
+        // Example: displayMessage(data);
+        
+        // To reply back to the iframe:
+        // event.source.postMessage({
+        //     type: 'CHAT_MESSAGE',
+        //     message: 'Your reply',
+        //     sender: 'Parent window',
+        //     timestamp: new Date().toISOString()
+        // }, event.origin);
     }
 });
             </pre>
