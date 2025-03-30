@@ -1,0 +1,49 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="importmap">
+    {
+        "imports": {
+            "config": "./config.js"
+        }
+    }
+    </script>
+</head>
+<body>
+    <div class="chat-container">
+        <h1>Iframe Chat Room</h1>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-area">
+            <input type="text" id="messageInput" placeholder="Type your message here...">
+            <button id="sendButton">Send</button>
+        </div>
+    </div>
+    <div class="info-box">
+        <h3>Integration Information</h3>
+        <div class="code-info">
+            <h4>How to listen for messages in the parent window:</h4>
+            <pre id="codeSnippet">
+window.addEventListener('message', function(event) {
+    // Security check
+    if (event.origin !== window.location.origin) return;
+    
+    // Process the message
+    const data = event.data;
+    if (data.type === 'CHAT_MESSAGE') {
+        console.log('Received message:', data.message);
+        console.log('Sender:', data.sender);
+        console.log('Timestamp:', data.timestamp);
+        // Handle the message in your application
+    }
+});
+            </pre>
+            <button id="copyCode">Copy Code</button>
+        </div>
+    </div>
+    <script type="module" src="script.js"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
